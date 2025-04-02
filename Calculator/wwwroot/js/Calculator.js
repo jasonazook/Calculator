@@ -46,11 +46,28 @@
         button.addEventListener('click', function () {
             const operator = button.value;
 
-            // Handle case where operator is already at the end
-            if (['+', '-', '*', '/'].includes(currentInput.slice(-1))) {
-                currentInput = currentInput.slice(0, -1) + operator;
+            // Special operators handling
+            if (operator === '+/-') {
+                // Toggle the sign of the current number
+                if (currentInput !== '' && currentInput !== '0') {
+                    if (currentInput.startsWith('-')) {
+                        currentInput = currentInput.substring(1);
+                    } else {
+                        currentInput = '-' + currentInput;
+                    }
+                }
+            } else if (operator === '%') {
+                // Calculate percentage (divide by 100)
+                if (currentInput !== '' && !isNaN(parseFloat(currentInput))) {
+                    currentInput = (parseFloat(currentInput) / 100).toString();
+                }
             } else {
-                currentInput += operator;
+                // Handle case where operator is already at the end
+                if (['+', '-', '*', '/'].includes(currentInput.slice(-1))) {
+                    currentInput = currentInput.slice(0, -1) + operator;
+                } else {
+                    currentInput += operator;
+                }
             }
 
             waitingForOperand = false;
